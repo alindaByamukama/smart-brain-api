@@ -11,7 +11,7 @@ const image = require('./controllers/image')
 const db = knex({
     client: 'pg',
     connection: {
-      host : '127.0.0.1', // localhost location
+      host : 'postgresql-cubic-68597', // localhost location
       port : 5432, // add your pg port number
       user : 'postgres', // add your pg username
       password : 'smartbrain', // add your pg or pgadmin etc password if any
@@ -26,7 +26,7 @@ app.use(express.json())
 app.use(cors())
 
 app.get('/', (req, res)=> {
-    res.send(db.users)
+    res.send("success!")
 })
 
 app.post('/signin', (req, res) => { signin.handleSignin(req, res, db, bcrypt) })
@@ -39,6 +39,6 @@ app.put('/image',  (req, res) => { image.handleImage(req, res, db) })
 
 app.post('/imageurl',  (req, res) => { image.handleApiCall(req, res) })
 
-app.listen(3000, () => {
-    console.log("app is running on on port 3000")
+app.listen(process.env.PORT || 3000, () => {
+    console.log(`app is running on on port ${process.env.PORT}`)
 })
