@@ -6,8 +6,12 @@ const app = new Clarifai.App({
 })
 
 const handleApiCall = (req, res) =>  {
+    const { input } = req.body
     app.models
-        .predict(Clarifai.FACE_DETECT_MODEL, req.body.input)
+        .predict({
+            id: 'face-detection',
+            version: '6dc7e46bc9124c5c8824be4822abe105'
+        }, input)
         .then(data => {
              // Log the response data
             console.log('Clarifai response data:', data);
