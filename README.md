@@ -4,6 +4,8 @@
 
 Smart Brain is a face recognition app that detects faces in an image using the Clarifai API. This repository contains the backend code for handling user authentication, image submissions, and interactions with the Clarifai API.
 
+- **Frontend Repository for the Smart Brain App**: [here](https://github.com/alindaByamukama/smart-brain-frontend)
+
 ### Features
 
 - Creating our project server that connects to our front-end project.
