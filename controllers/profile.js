@@ -15,6 +15,6 @@ const handleProfile = (req, res, db)=> {
         }) // declared but never read
 }
 
-module.exports = {
+export {
     handleProfile
 }

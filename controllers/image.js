@@ -1,28 +1,31 @@
-const Clarifai = require('clarifai')
+import { Model } from "clarifai-nodejs";
+import dotenv from 'dotenv';
+dotenv.config();
 
-// You must add your own API key here from Clarifai
-const app = new Clarifai.App({
-    apiKey: process.env.CLARIFAI_API_KEY
-})
+const modelUrl = process.env.CLARIFAI_MODEL_URL;
+const detectorModel = new Model({
+  url: modelUrl,
+  authConfig: {
+    pat: process.env.CLARIFAI_PAT,
+  },
+});
 
-const handleApiCall = (req, res) =>  {
-    const { input } = req.body
-    app.models
-        .predict({
-            id: 'face-detection',
-            version: '6dc7e46bc9124c5c8824be4822abe105'
-        }, input)
-        .then(data => {
-             // Log the response data
-            console.log('Clarifai response data:', data);
-            res.json(data)
-        })
-        .catch(err => {
-              // Log the error
-            console.error('Error with Clarifai API:', err);
-            res.status(400).json('unable to work with api')})
-}
+// Talks to Clarifai. It sends the image URL to the Clarifai model and returns the prediction (face detection boxes, etc.) to your frontend.
+const handleApiCall = async (req, res) => {
+  try {
+    const { input } = req.body; // Image URL from frontend
+    const prediction = await detectorModel.predictByUrl({
+      url: input,
+      inputType: "image",
+    });
+    res.json(prediction);
+  } catch (error) {
+    console.error("Clarifai API error:", error);
+    res.status(400).json("Unable to work with API");
+  }
+};
 
+// Updates your PostgreSQL users table to increment the entries count each time a user submits an image.
 const handleImage = (req, res, db) => {
     const { id } = req.body
     // Log the received ID
@@ -39,7 +42,7 @@ const handleImage = (req, res, db) => {
         res.status(400).json('Unable to get entries...')})
 }
 
-module.exports = {
+export { 
     handleImage, 
     handleApiCall
 }
