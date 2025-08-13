@@ -45,3 +45,13 @@ app.post('/imageurl',  (req, res) => { handleApiCall(req, res) })
 app.listen(process.env.PORT || 3000, () => {
     console.log(`app is running on on port ${process.env.PORT}`)
 })
+
+app.get('/testdb', async (req, res) => {
+  try {
+    const result = await db.select('*').from('users').limit(1);
+    res.json(result);
+  } catch (err) {
+    console.error('DB Test Error:', err);
+    res.status(500).send('Database connection failed');
+  }
+});
