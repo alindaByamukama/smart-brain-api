@@ -1,13 +1,15 @@
-const express = require('express')
-const cors = require('cors')
-const knex = require('knex')
-bcrypt = require('bcrypt-nodejs')
-require('dotenv').config();
+import dotenv from 'dotenv';
+dotenv.config();
 
-const register = require('./controllers/register')
-const signin = require('./controllers/signin')
-const profile = require('./controllers/profile')
-const image = require('./controllers/image')
+import express from 'express'
+import bcrypt from 'bcrypt-nodejs'
+import cors from 'cors'
+import knex from 'knex'
+
+import {handleRegister} from './controllers/register.js';
+import {handleSignin} from './controllers/signin.js';
+import {handleProfile} from './controllers/profile.js';
+import {handleApiCall, handleImage} from './controllers/image.js';
 
 
 const db = knex({
@@ -30,15 +32,15 @@ app.get('/', (req, res)=> {
     res.send("success")
 })
 
-app.post('/signin', (req, res) => { signin.handleSignin(req, res, db, bcrypt) })
+app.post('/signin', (req, res) => { handleSignin(req, res, db, bcrypt) })
 
-app.post('/register', (req, res) => { register.handleRegister(req, res, db, bcrypt) })
+app.post('/register', (req, res) => { handleRegister(req, res, db, bcrypt) })
 
-app.get('/profile/:id', (req, res) => { profile.handleProfile(req, res, db) })
+app.get('/profile/:id', (req, res) => { handleProfile(req, res, db) })
 
-app.put('/image',  (req, res) => { image.handleImage(req, res, db) })
+app.put('/image',  (req, res) => { handleImage(req, res, db) })
 
-app.post('/imageurl',  (req, res) => { image.handleApiCall(req, res) })
+app.post('/imageurl',  (req, res) => { handleApiCall(req, res) })
 
 app.listen(process.env.PORT || 3000, () => {
     console.log(`app is running on on port ${process.env.PORT}`)
